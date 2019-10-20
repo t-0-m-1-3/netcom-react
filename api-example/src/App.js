@@ -7,10 +7,12 @@ const App = () => {
   const [joke, setJoke] = useState('');
   
 const fetchJoke = async signal => {
-  const url = new URL('https://official-joke-api.appspot.com/jokes/programming/random');
-  const response = await fetch(url, { signal });
+const url = new URL('https://api.icndb.com/jokes/random');
+// signal is a 2nd parameter that allows the calle to be cancled  
+const response = await fetch(url, { signal });
   const { value } = await response.json();
-
+  console.log('response', response)
+  
   setJoke(decode(value.joke));
 }
 
