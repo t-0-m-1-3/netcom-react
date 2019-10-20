@@ -7,7 +7,7 @@ const App = () => {
   const [joke, setJoke] = useState('');
   
 const fetchJoke = async signal => {
-  const url = new URL('https://api.icndb.com/jokes/random');
+  const url = new URL('https://official-joke-api.appspot.com/jokes/programming/random');
   const response = await fetch(url, { signal });
   const { value } = await response.json();
 
