@@ -1,7 +1,7 @@
-Forms
-
+### Forms
+---
 HTML form elements work a little bit differently from other DOM elements in React, because form elements naturally keep some internal state. For example, this form in plain HTML accepts a single name:
-
+```html
 <form>
   <label>
     Name:
@@ -9,16 +9,17 @@ HTML form elements work a little bit differently from other DOM elements in Reac
   </label>
   <input type="submit" value="Submit" />
 </form>
+```
+This form has the default HTML form behavior of browsing to a new page when the user submits the form. If you want this behavior in React, it just works. But in most cases, it’s convenient to have a JavaScript function that handles the submission of the form and has access to the data that the user entered into the form. The standard way to achieve this is with a technique called “**controlled components**”.
 
-This form has the default HTML form behavior of browsing to a new page when the user submits the form. If you want this behavior in React, it just works. But in most cases, it’s convenient to have a JavaScript function that handles the submission of the form and has access to the data that the user entered into the form. The standard way to achieve this is with a technique called “controlled components”.
-Controlled Components
-
-In HTML, form elements such as <input>, <textarea>, and <select> typically maintain their own state and update it based on user input. In React, mutable state is typically kept in the state property of components, and only updated with setState().
+### Controlled Components
+----
+In HTML, form elements such as `<input>`, `<textarea>`, and `<select>` typically maintain their own state and update it based on user input. In React, mutable state is typically kept in the state property of components, and only updated with `setState()`.
 
 We can combine the two by making the React state be the “single source of truth”. Then the React component that renders a form also controls what happens in that form on subsequent user input. An input form element whose value is controlled by React in this way is called a “controlled component”.
 
 For example, if we want to make the previous example log the name when it is submitted, we can write the form as a controlled component:
-
+```javascript
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
@@ -49,27 +50,27 @@ class NameForm extends React.Component {
     );
   }
 }
+```
 
-Try it on CodePen
+Since the value attribute is set on our form element, the displayed value will always be this.state.value, making the React state the source of truth. Since `handleChange` runs on every keystroke to update the React state, the displayed value will update as the user types.
 
-Since the value attribute is set on our form element, the displayed value will always be this.state.value, making the React state the source of truth. Since handleChange runs on every keystroke to update the React state, the displayed value will update as the user types.
-
-With a controlled component, every state mutation will have an associated handler function. This makes it straightforward to modify or validate user input. For example, if we wanted to enforce that names are written with all uppercase letters, we could write handleChange as:
-
+With a controlled component, every state mutation will have an associated handler function. This makes it straightforward to modify or validate user input. For example, if we wanted to enforce that names are written with all uppercase letters, we could write `handleChange` as:
+```javascript
 handleChange(event) {
   this.setState({value: event.target.value.toUpperCase()});
 }
+```
 
-The textarea Tag
-
-In HTML, a <textarea> element defines its text by its children:
-
+### The textarea Tag
+---
+In HTML, a `<textarea>` element defines its text by its children:
+```html
 <textarea>
   Hello there, this is some text in a text area
 </textarea>
-
-In React, a <textarea> uses a value attribute instead. This way, a form using a <textarea> can be written very similarly to a form that uses a single-line input:
-
+```
+In React, a `<textarea>` uses a value attribute instead. This way, a form using a `<textarea>` can be written very similarly to a form that uses a single-line input:
+```javascript
 class EssayForm extends React.Component {
   constructor(props) {
     super(props);
@@ -102,21 +103,22 @@ class EssayForm extends React.Component {
     );
   }
 }
+```
+Notice that `this.state.value` is initialized in the constructor, so that the text area starts off with some text in it.
 
-Notice that this.state.value is initialized in the constructor, so that the text area starts off with some text in it.
-The select Tag
-
-In HTML, <select> creates a drop-down list. For example, this HTML creates a drop-down list of flavors:
-
+### The select Tag
+---
+In HTML, `<select>` creates a drop-down list. For example, this HTML creates a drop-down list of flavors:
+```html
 <select>
   <option value="grapefruit">Grapefruit</option>
   <option value="lime">Lime</option>
   <option selected value="coconut">Coconut</option>
   <option value="mango">Mango</option>
 </select>
-
+```
 Note that the Coconut option is initially selected, because of the selected attribute. React, instead of using this selected attribute, uses a value attribute on the root select tag. This is more convenient in a controlled component because you only need to update it in one place. For example:
-
+```javascript
 class FlavorForm extends React.Component {
   constructor(props) {
     super(props);
@@ -152,30 +154,30 @@ class FlavorForm extends React.Component {
     );
   }
 }
+```
 
-Try it on CodePen
+Overall, this makes it so that `<input type="text">`, `<textarea>`, and `<select>` all work very similarly - they all accept a value attribute that you can use to implement a controlled component.
 
-Overall, this makes it so that <input type="text">, <textarea>, and <select> all work very similarly - they all accept a value attribute that you can use to implement a controlled component.
+>  Note
 
-    Note
+ > You can pass an array into the value attribute, allowing you to select multiple options in a select tag:
 
-    You can pass an array into the value attribute, allowing you to select multiple options in a select tag:
+ `<select multiple={true} value={['B', 'C']}>`
 
-    <select multiple={true} value={['B', 'C']}>
+### The file input Tag
+----
+In HTML, an `<input type="file">` lets the user choose one or more files from their device storage to be uploaded to a server or manipulated by JavaScript via the File API.
 
-The file input Tag
+`<input type="file" />`
 
-In HTML, an <input type="file"> lets the user choose one or more files from their device storage to be uploaded to a server or manipulated by JavaScript via the File API.
+Because its value is read-only, it is an uncontrolled component in React. 
 
-<input type="file" />
-
-Because its value is read-only, it is an uncontrolled component in React. It is discussed together with other uncontrolled components later in the documentation.
-Handling Multiple Inputs
-
-When you need to handle multiple controlled input elements, you can add a name attribute to each element and let the handler function choose what to do based on the value of event.target.name.
+### Handling Multiple Inputs
+----
+When you need to handle multiple controlled input elements, you can add a name attribute to each element and let the handler function choose what to do based on the value of `event.target.name`.
 
 For example:
-
+```javascript
 class Reservation extends React.Component {
   constructor(props) {
     super(props);
@@ -221,39 +223,40 @@ class Reservation extends React.Component {
     );
   }
 }
+```
 
-Try it on CodePen
-
-Note how we used the ES6 computed property name syntax to update the state key corresponding to the given input name:
-
+Note how we used the `ES6` computed property name syntax to update the state key corresponding to the given input name:
+```javascript
 this.setState({
   [name]: value
 });
-
-It is equivalent to this ES5 code:
-
+```
+It is equivalent to this `ES5` code:
+```javascript
 var partialState = {};
 partialState[name] = value;
 this.setState(partialState);
+```
+Also, since `setState()` automatically merges a partial state into the current state, we only needed to call it with the changed parts.
 
-Also, since setState() automatically merges a partial state into the current state, we only needed to call it with the changed parts.
-Controlled Input Null Value
-
+### Controlled Input Null Value
+----
 Specifying the value prop on a controlled component prevents the user from changing the input unless you desire so. If you’ve specified a value but the input is still editable, you may have accidentally set value to undefined or null.
 
 The following code demonstrates this. (The input is locked at first but becomes editable after a short delay.)
-
+```javascript
 ReactDOM.render(<input value="hi" />, mountNode);
 
 setTimeout(function() {
   ReactDOM.render(<input value={null} />, mountNode);
 }, 1000);
-
-Alternatives to Controlled Components
-
+``` 
+### Alternatives to Controlled Components
+----
 It can sometimes be tedious to use controlled components, because you need to write an event handler for every way your data can change and pipe all of the input state through a React component. This can become particularly annoying when you are converting a preexisting codebase to React, or integrating a React application with a non-React library. In these situations, you might want to check out uncontrolled components, an alternative technique for implementing input forms.
-Fully-Fledged Solutions
 
-If you’re looking for a complete solution including validation, keeping track of the visited fields, and handling form submission, Formik is one of the popular choices. However, it is built on the same principles of controlled components and managing state — so don’t neglect to learn them.
+### Fully-Fledged Solutions
+---
+If you’re looking for a complete solution including validation, keeping track of the visited fields, and handling form submission, `Formik` is one of the popular choices. However, it is built on the same principles of controlled components and managing state — so don’t neglect to learn them.
 
 [Next Page](./LiftingStateUp.md)
