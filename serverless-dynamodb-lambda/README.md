@@ -22,11 +22,15 @@ Populate the table name and set ‘date’ as a primary key. Then choose ‘Crea
 
 These are all steps required to set up a DynamoDB table for now.
 ![dynamnoDB](./Screenshot_20191022_173543.png)
-1.2 Creating an AWS Lambda function.
 
-Go to the AWS Management Console. Find a Lambda service in the search bar. We need Lambda because for our simple back-end to work, we only need Function-as-a-service (FAAS) as opposed to, for example, Platform-as-a-service (PAAS). Plus, Lambda is relatively cheaper because it charges only for the compute time.
+### Creating an AWS Lambda function.
+----
+Go to the AWS Management Console. Find a Lambda service in the search bar. 
 
-Once you are in the AWS Lambda → Functions, choose an orange button in the top right, which says ‘Create Function’. We are going to create a function using an ‘Author from scratch’ option, without any preconfigured templates. Populate the table with the following information and then press ‘create function’:
+Once you are in the `AWS Lambda → Functions`, choose an orange button in the top right, which says ‘Create Function’. 
+
+Create a function using an ‘Author from scratch’ option, without any preconfigured templates. Populate the table with the following information and then press ‘create function’:
+![dynamnoDB](./Screenshot_20191022_174047.png)
 
 Next, we are going to write the below function code and press ‘Save’. Remember to put the region corresponding to your case in line 2. The key details here are on lines 8–9, and 11. Lines 8–9 indicate that DynamoDB will receive an object from the Lambda function containing a date and a message in ‘object.key1’ property. Line 11 must include the name of the table that you created in DynamoDB. In our case, this is ‘serverlessApp’.
 1.3 Configuring an API Gateway.
