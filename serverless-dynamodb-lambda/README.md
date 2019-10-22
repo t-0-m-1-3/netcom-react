@@ -1,5 +1,6 @@
 ### react-app for the front-end and AWS Lambda, DynamoDB, and API Gateways for the back-end.
 ----
+#### The Serverless Function Was Taken Down Prior to class
 
 [The code for the front-end is saved in this repository](https://github.com/gulikholmatova/serverless-app)
 
