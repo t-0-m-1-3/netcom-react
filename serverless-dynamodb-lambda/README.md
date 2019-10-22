@@ -89,5 +89,3 @@ AWS Lambda function does not have the permission to connect to the DynamoDB inst
 
 We are going to allow the function all actions in relation to the given table in DynamoDB. After you do this, click ‘Review Policy’ in the bottom right, create a name and save changes.
 
-![dynamnoDB](./iam-policy-dynamadbFA.png)
-Now, we can test the URL from the step earlier in the Postman. Here, an important step is that you need to attach the title of your AWS Lambda Function to the invoke URL link.
