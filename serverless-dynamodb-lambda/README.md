@@ -21,7 +21,7 @@ Then choose a blue button that says ‘Create Table’.
 Populate the table name and set ‘date’ as a primary key. Then choose ‘Create’ in the bottom right.
 
 These are all steps required to set up a DynamoDB table for now.
-![dynamnoDB][./Screenshot_20191022_173543.png]
+![dynamnoDB](./Screenshot_20191022_173543.png)
 1.2 Creating an AWS Lambda function.
 
 Go to the AWS Management Console. Find a Lambda service in the search bar. We need Lambda because for our simple back-end to work, we only need Function-as-a-service (FAAS) as opposed to, for example, Platform-as-a-service (PAAS). Plus, Lambda is relatively cheaper because it charges only for the compute time.
