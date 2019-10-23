@@ -1,68 +1,243 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Hooks at a Glance
+---
+* Hooks are backwards compatible
 
-## Available Scripts
+#### State Hook
+----
+The counter example
+```javascript
+import React, { useState } from 'react';
 
-In the project directory, you can run:
+function Example() {
+  // Declare a new state variable, which we'll call "count"
+  //unlike `this.setState` the argument doesn't need to be an object
+  const [count, setCount] = useState(0);
 
-### `yarn start`
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+* In this function `useState` is a hook, it is called inside a function componenet to add some local state
+* React preserves this between re-renders
+* `useState` returns a pair; the *current state* and a function that lets you update it.
+* You can call this function from an event handler or somewhere else. 
+* Similar to `this.setState` in a class without merging the old and new state together.
+* The only argument is taakes is the initial state.
+* Arguments for `useState` don't have to be objects, but they can be if you want them to
+* Initial state is only used in the first render
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Declaring multiple state variables
+----
+* Using the state hook multiple times in a single component saves space
+```javascript
+function ExampleWithManyState(){
+	//declare multiple state vars
+	const [age, setAge] = useState(42);
+	const [fruit, setFruit] = useState('banana');
+	const [todos, setTodos] = useState([{text: 'replace lifecycle methods with hooks'}]);
+	// other stuff and logic
+	}
+```
+* **Array Destructuring** syntax gives different names to the state variables by calling `useState`.
+* React assumes that if you call `useState` many times, you do it in the same order during every render
 
-### `yarn test`
+#### What are these things?
+--- 
+* Hooks are just functions ( like everything is an object in JS, everything in hooks are functions )
+* They let you *hook into* React state and lifecycle features from **function components**.
+* **Hooks do not work in classes**; ~React doesn't recommend re-writing your apps in Hooks~
+* React provides a few built-in hooks like `useState`; you can also create your own or find more at [Awesome-Hooks Github](https://github.com/rehooks/awesome-react-hooks)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Effect Hook
+----
+* **Side Effects** are operations that affect other components and cannot be done during rendering; This is like data fetching, subscriptions, or manually changing the DOM. 
+* The Effect Hook, `useEffect`, adds the ability to perform side effects from a function component. 
+	* it serves the same purpose as: `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` in React classes within on API. 
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```javascript 
+// setting a document title after React updates the DOM
+import React, {useState, useEffect} from 'react';
+function Example() {
+  const [count, setCount] = useState(0);
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+// Similar to componentDidMount and componentDidUpdate
+useEffect(() => {
+//update the document title using the browser API
+	document.title = `You Clicked ${count} times`;
+}); 
+return (
+	<div>
+	 <p> You clicked {count} times </p>
+		 <button onClick{() => setCount(count + 1)}>
+			Click Me Please
+		</button>
+	</div>
+);
+}
+```
+* Calling the `useEffect` tells react the run the effect function *after* flushing changes to the DOM.
+* Effects are declared inside the component so they have access to props and state. 
+* Default: React runs the effects after *ever* render, including the first.
+* Effects may also optionally specifiy how to "clean up" by returning a function
+```javascript
+import React, {useState, useEffect} from 'react';
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+function FriendStatus(props) {
+  const [isOnline, setIsOnline] = useState(null);
 
-### `yarn eject`
+  function handleStatusChange(status) {
+  setIsOnline(status.isOnline);
+  }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  useEffect(() => {
+  ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  return () => {
+  ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+  };
+  });
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  if (isOnline === null) {
+  return 'Loading ...';
+  }
+  return inOnline ? 'Online' : 'Offline';
+  }
+  ```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+* Here react unsubscribes from the `ChatAPI` when the component unmounts, and before re-running the ffect for a subsequent re-render. ( you can tell react to skip this is the `props.friend.id` didn't chnge ) 
+* You can use more than a single effect in a component, just like `useState` 
+```javascript 
+function FriendStatusWithCounter(props){
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+    });
 
-## Learn More
+    const [isOnline, setIsOnline] = useState(null);
+    useEffect(() => {
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    return () => {
+    ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+    });
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    funtion handleStatusChange(status){
+    setIsOnline(status.isOnline);
+    }
+    // more logic below
+```
+* Hooks allow you to organize side effects in a component by what peices are related, rather than splitting up by lifecycle methods. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Rules of Hooks
+----
+* Hooks are functions, but they impose two additional rules:
+1. Only call hooks at the **top level**, not inside of loops, conditions, or nested functions. 
+2. Only call hooks **from React function components**, not in regular JS functions. 
 
-### Code Splitting
+* Facebook provides it's custom [linter program they built](https://www.npmjs.com/package/eslint-plugin-react-hooks) to help 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+* Assuming you already have ESLint installed, run:
+```bash
+# npm 
+npm install eslint-plugin-react-hooks --save-dev
+ 
+# yarn 
+yarn add eslint-plugin-react-hooks --dev
+``` 
+* inside eslint configurations
+```json
+{
+  "plugins": [
+    // ...
+    "react-hooks"
+  ],
+  "rules": {
+    // ...
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}
+```
 
-### Analyzing the Bundle Size
+### Building your Own Hooks
+----
+* Reusing stateful logic between components is a powerful feature of React.
+* Previously, **Higher Order Components** and **Render Props** were the two paradigms used
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```javascript
+// the former FriendStatus component called `useState` and `useEffect` to subscribe to a friends status
+// to reuse this logic in another component, one design pattern is
+import React, {useState, useEffect} from 'react';
+function useFriendStatus(friendID){
+	const [isOnline, setIsOnline] = useState(null);
+function handleStatusChange(status) {
+setIsOnline(status.isOnline);
+}
 
-### Making a Progressive Web App
+useEffect(() => {
+	ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+	return () => {
+	ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+	};
+	});
+	return isOnline;
+	}
+```
+* This takes `friendID` as an argument and returns whether or not the friend is online, now it can be reused
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```javascript
+function FriendStatus(props) {
+ const isOnline = useFriendStatus(props.friend.id);
 
-### Advanced Configuration
+ if (isOnline === null ) {
+  return 'Loading ...';
+  }
+   return isOnline ? 'Online' : 'Offline';
+   }
+```
+and in the other component
+```javascript
+function FriendListItem(props) {
+const isOnline = userFriendStatus(props.friend.id);
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+return (
+	<li style={{color: isOnline ? 'green' : 'black' }}>
+	{props.friend.name}
+	</li>
+	);
+	}
+```
 
-### Deployment
+* State here is completely independent. Hooks are ways to reuse *stateful* logic, not *state*.
+* Each call to a Hook is a completely isolated state. ( use same Hook twice in a component)
+* Custom hooks are more of a convention than feature. 
+	* function names that state with `use` and calls other Hooks it's a **custom** hook. 
+	* `useWhatever` will be picked up by the linter. 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+### Other Hooks
+----
+* Less common built in hooks can also be useful
+* `useContext` lets you subscribe to React context without nesting
+```javascript
+function Example() {
+ const locale = useContext(LocalContext);
+ const theme = useContext(ThemeContext):
+ //dragons and stuff
+ }
+```
 
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* `useReducer` lets you manage local state of complex components with a reducer. 
+```javascript 
+function Todos() {
+   const [todos, setTodos] = useReducer(todosReducer);
+   // other logic to print or manipulate todos
+```
+```
