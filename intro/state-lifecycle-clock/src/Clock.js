@@ -1,7 +1,7 @@
 import React from 'react';
 
 // User Defined Component passing it's props down to a child component
-// `FormattedDate` recieved the `date` in `props` and not care where it came from
+// `FormattedDate` recieved the `date` in `props` and does not care where it came from
 // `Clock`'s state or props
 // This is "top-down" date flow, state is owned by a specific component, and anything from that state can only affect components "below" them in the Tree.
 function FormattedDate(props) {

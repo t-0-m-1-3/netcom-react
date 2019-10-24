@@ -17,6 +17,7 @@ export default function App() {
 	  The Clock component no longer has the new Date Prop passed in
 	  <Clock />
 
+
 	  Since it doesn't know if this comes from state or props of Clock, each prop passed into FormattedDate is specific to it.
 
     </div>
