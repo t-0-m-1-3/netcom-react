@@ -1,14 +1,14 @@
-Composition vs Inheritance
-
+### Composition vs Inheritance
+---
 React has a powerful composition model, and we recommend using composition instead of inheritance to reuse code between components.
 
-In this section, we will consider a few problems where developers new to React often reach for inheritance, and show how we can solve them with composition.
-Containment
 
+### Containment
+----
 Some components don’t know their children ahead of time. This is especially common for components like Sidebar or Dialog that represent generic “boxes”.
 
 We recommend that such components use the special children prop to pass children elements directly into their output:
-
+```javascript
 function FancyBorder(props) {
   return (
     <div className={'FancyBorder FancyBorder-' + props.color}>
@@ -16,9 +16,11 @@ function FancyBorder(props) {
     </div>
   );
 }
+```
 
 This lets other components pass arbitrary children to them by nesting the JSX:
 
+```javascript
 function WelcomeDialog() {
   return (
     <FancyBorder color="blue">
@@ -32,6 +34,7 @@ function WelcomeDialog() {
   );
 }
 
+```
 
 Anything inside the `<FancyBorder>` JSX tag gets passed into the FancyBorder component as a children prop. Since `FancyBorder` renders `{props.children}` inside a `<div>`, the passed elements appear in the final output.
 
