@@ -8,14 +8,17 @@ export default function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          This is a quick look at the clock example and how props, state, and lifecycle methods change things
-        </p>
-	  <p> The goal with a react componenet is to write it once and leave it alone, having something else control props </p>
+	  <Clock />
       </header>
+	  <Clock />
 	  	  The Code below is the component with lifecycle methods, before pulling state up
-	  <Clock time={new Date}/>
-	  The Clock component should be above
+	  <Clock />
+
+	  The Clock component no longer has the new Date Prop passed in
+	  <Clock />
+
+	  Since it doesn't know if this comes from state or props of Clock, each prop passed into FormattedDate is specific to it.
+
     </div>
   );
 }
