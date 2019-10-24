@@ -2,10 +2,10 @@ var mysql = require('mysql');
 // var bcrypt = require('bcrypt');
 var jsonfile = require('jsonfile');
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : '172.17.0.2',
   user     : 'root',
   password : 'root@123',
-  database : 'cloudprint',
+  database : 'netcomreact,
   insecureAuth: false
 });
 connection.connect(function(err){
