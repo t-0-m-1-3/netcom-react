@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "auth0-js": "^9.11.3",
+    "auth0-js": "^9.13.2",
     "dotenv": "^8.2.0",
     "husky": "^2.2.0",
     "lint-staged": "^8.1.6",
